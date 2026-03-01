@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  # ── FastAPI Backend ──────────────────────────────────
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.example
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:///./gym.db
+    volumes:
+      - ./backend:/app
+      - uploads:/app/uploads
+
+  # ── React Frontend ──────────────────────────────────
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  uploads:
